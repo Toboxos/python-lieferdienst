@@ -5,7 +5,7 @@ import telebot
 url= 'http://www.capri-pizza-service.de/img/flyer_januar2020.pdf'
 
 filedirectory= 'C:/Users/betki/Documents/Uni/webEngineering/Karte2.pdf'
-TOKEN= '1009520225:AAFe0bRViAfP8CrHVlW7LwZHyTwpURBDGxA'
+TOKEN= 'hier muss das token stehen'
 
 bot= telebot.TeleBot(token=TOKEN)
 global g_chatID
