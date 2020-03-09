@@ -2,33 +2,32 @@
 # mit /karte wird die Karte geschickt
 #mit "Bestellung 12" wird eine Bestellung mit Namen eingetragen, wenn man nochmal eine Schickt, wird sie hinzugefügt
 
+from telegram.ext import Updater, CommandHandler, MessageHandler
+from telegram.ext.filters import Filters
+from io import StringIO
 import urllib
 import requests
-import telebot
 import json
+
+
+
 url= 'http://www.capri-pizza-service.de/img/flyer_januar2020.pdf'
 
-filedirectory= 'HIERMUSSEINEFILEDIRECTORY STEHEN'   #z.B. C:/Users/...
-TOKEN= 'HIERMUSSEINTOKENSTEHEN'
-
-bot= telebot.TeleBot(token=TOKEN)
+filedirectory= 'C:/Users/betki/Documents/Uni/webEngineering/Karte2.pdf'
+TOKEN= '1009520225:AAFe0bRViAfP8CrHVlW7LwZHyTwpURBDGxA'
 
 
-@bot.message_handler(commands= ['karte'])           #karte downloaden und schicken
-def send_karte(message):
-    global g_chatID
-    g_chatID = message.chat.id
+ #karte downloaden und schicken
+def send_karte(update,context):
     myfile= requests.get(url, allow_redirects= True)    #TODO: hier link fest genutzt, nicht dynmaisch
     open(filedirectory,'wb').write(myfile.content)
     doc = open(filedirectory, 'rb')
-    bot.send_document(g_chatID, doc )
-    bot.send_message(g_chatID,'Danke man ')
+    context.bot.send_document( chat_id=update.effective_chat.id, document=doc )
 
-@bot.message_handler(func=lambda msg: msg.text is not None and 'Bestellung' in msg.text)
-def get_bestellung(message):
-    bot.send_message(g_chatID,'Danke man ')
-    texts = message.text.split(" ",2)               # Nachricht splitten um Bestellungsnummer finden
-    name = message.from_user.first_name             #Vorname finden
+def get_bestellung(update,context):
+    update.message.reply_text('danke')
+    texts = update.message.text.split(" ", 2)               # Nachricht splitten um Bestellungsnummer finden
+    name = update.message.from_user.first_name              #Vorname finden
     bestellung = texts[1]
     neueBestellung(name, bestellung)
     
@@ -47,13 +46,15 @@ def neueBestellung(name, bestellung):
         with open('Bestellungen.json', 'w') as outfile:#reinschreiben
             json.dump(JSON_file, outfile)
     else:                                              #gibt es den Namen nicht
-        JSON_file= {name: [bestellung]}                 #wir hier die JSON Datei neu Beschrieben,TODO: in der Gruppe muss hier hinzugefügt werden, nicht überschrieben
+        JSON_file= {name: [bestellung]}                 #wir hier die JSON Datei neu Beschrieben,TODO: in der Gruppe muss hier hinzugefügt werden
         with open('Bestellungen.json', 'w') as outfile:
             json.dump(JSON_file, outfile)
    
 
-while True:
-    try:
-        bot.infinity_polling(True)
-    except Exception:
-        time.sleep(3)
+updater = Updater(TOKEN, use_context=True)
+
+updater.dispatcher.add_handler(CommandHandler('karte', send_karte))
+updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'Bestellung'), get_bestellung))  #ruft get_bestellung auf wenn Bestellung in der Nachricht enthalten ist
+
+updater.start_polling()
+updater.idle()
