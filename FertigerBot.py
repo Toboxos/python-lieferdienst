@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from telegram.ext import Updater, CommandHandler, MessageHandler
 from telegram.ext.filters import Filters
 from io import StringIO
