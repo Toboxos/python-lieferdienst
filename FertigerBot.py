@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from telegram.ext import Updater, CommandHandler, MessageHandler
 from telegram.ext.filters import Filters
 from io import StringIO
@@ -17,6 +18,21 @@ _jsonFileName = "data.json"
 
 
 class BestellungsManager:
+    """Diese Klasse verwaltet die Bestellungen von verschiedenen Gruppen.
+    
+    Die Bestellungen werden in der Variable bestellungen als Dictionary gespeichert. Folgende Struktur:
+    {
+        chatId:
+            "amLaufen": True|False,
+            "users": {
+                "user1": [1, 2, 3],
+                "user2": [2, 3],
+                ...
+            }
+        },
+        ...
+    }
+    """
 
     def __init__(self):
         # JSON-Datei exisitiert
@@ -233,12 +249,14 @@ def endWerWas(update,context):
 
 
 
-updater = Updater(TOKEN, use_context=True)
 
-updater.dispatcher.add_handler(CommandHandler('capricapri', startOrder))
-updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'Nr'), bestellung))
-updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'lösche'), wasLoeschen))
-updater.dispatcher.add_handler(CommandHandler('Ende', end))
-updater.dispatcher.add_handler(CommandHandler('WerWas', endWerWas))
-updater.start_polling()
-updater.idle()
+if __name__ == "__main__":
+    updater = Updater(TOKEN, use_context=True)
+
+    updater.dispatcher.add_handler(CommandHandler('capricapri', startOrder))
+    updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'Nr'), bestellung))
+    updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'lösche'), wasLoeschen))
+    updater.dispatcher.add_handler(CommandHandler('Ende', end))
+    updater.dispatcher.add_handler(CommandHandler('WerWas', endWerWas))
+    updater.start_polling()
+    updater.idle()
