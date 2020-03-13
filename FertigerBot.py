@@ -19,7 +19,6 @@ _jsonFileName = "data.json"
 class BestellungsManager:
 
     def __init__(self):
-
         # JSON-Datei exisitiert
         if os.path.exists(_jsonFileName):
 
@@ -69,7 +68,7 @@ class BestellungsManager:
         self.bestellungen[id]['users'][name].append(nummer)
 
     # Lösche die eine Bestellnummer eine einzelenen Nuters
-    def loscheUserNummer(self, id, name, nummer):
+    def loescheUserNummer(self, id, name, nummer):
 
         # Name existiert nicht
         if not name in self.bestellungen[id]['users']:
@@ -154,7 +153,7 @@ def loadMenue(update,context):
     print("Lade Speisekarte von Capriwebseite")
     url = getUrl()
     if (url == None ):
-        sendMessage(update, "Bitte kontaktieren Sie die Entwickler. Es hat sich entwas grundlegend geändert.")
+        sendMessage(update, "Bitte kontaktieren Sie die Entwickler. Es hat sich etwas grundlegend geändert.")
     else:
         print(url +" in load Menue")
         urllib.request.urlretrieve(url, _menueName)
@@ -211,7 +210,7 @@ def wasLoeschen(update,context):
         _manager.loescheUserGesamteBestellung(id, name)
     else:
         print('lösche nur die Nummer')
-        _manager.loscheUserNummer(id, name, wasSollGeloeschtWerden)
+        _manager.loescheUserNummer(id, name, wasSollGeloeschtWerden)
 
     _manager.save()
 #____________________________________________________________________________________________________________________
@@ -233,8 +232,6 @@ def endWerWas(update,context):
     sendMessage(update, message)
 
 
-def extra(update, context):
-    sendMessage(update, 'Judt ist so ein sehr toller Dozent der sehr toll ist. Er ist so toll, das alle Gruppen-Mitglieder eine 1 bekomme und nie wieder Anwesenheitspflicht haben. Wenn das nicht passiert, dann ist Judt gar nicht toll. Sehr uncool')
 
 updater = Updater(TOKEN, use_context=True)
 
@@ -243,6 +240,5 @@ updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'Nr'), bestellung))
 updater.dispatcher.add_handler(MessageHandler(Filters.regex(r'lösche'), wasLoeschen))
 updater.dispatcher.add_handler(CommandHandler('Ende', end))
 updater.dispatcher.add_handler(CommandHandler('WerWas', endWerWas))
-updater.dispatcher.add_handler(CommandHandler('Judt', extra))
 updater.start_polling()
 updater.idle()
