@@ -35,6 +35,12 @@ class BestellungsManager:
     """
 
     def __init__(self):
+        """
+        Initialisierung eines BestellungsManagers:
+        - wenn JSON-Datei schon existiert, werden gespeicherte Bestellungen in Variable übernommen
+        - ansonsten leere Variable bestellungen
+        """
+    
         # JSON-Datei exisitiert
         if os.path.exists(_jsonFileName):
 
@@ -49,13 +55,23 @@ class BestellungsManager:
         else:
             self.bestellungen = {}
 
-    # Speichere Bestellungen in JSON-Datei
     def save(self):
+        """
+        Speichere den Inhalt der Variable bestellung in JSON-Datei
+        """
+
         with open(_jsonFileName, "w") as file:
             json.dump(self.bestellungen, file)
 
-    # Gibt zurück ob eine Bestellung bereits im Gange ist
+
     def istBestellungAmLaufen(self, id):
+        """     
+        - Ermittelt, ob schon eine Bestellung für einen Chat mit ID läuft
+        - legt ggf. eine neue Bestellung für diese ChatID an: Variable amLaufen jedoch False
+        :param id: zu überprüfende ChatID
+        :return: ChatID mit entweder True/False je nach amLaufen
+        """
+
         print( self.bestellungen )
         
         # Es gibt noch keine Bestellung
@@ -64,27 +80,51 @@ class BestellungsManager:
 
         return self.bestellungen[id]["amLaufen"]
 
-    # Beginnt eine neue Bestellung und löscht die alte
     def beginneBestellung(self, id):
-        self.bestellungen[id] = { "amLaufen": True, "users": {} }   # Lösche alte Bestellung und beginne neue
+        """
+        Beginnt eine Chat-Bestellung:
+         - amLaufen wird für die id auf True gesetzt
+         - Etwaige vorhandene Bestellung werden gelöscht: zur Bestellung gespeicherte Daten werden geleert
+        :param id: ChatID, deren Bestellung neu gestartet wird
+        """
 
-    # Beendet eine Bestellung
+        self.bestellungen[id] = { "amLaufen": True, "users": {} }
+
     def beendeBestellung(self, id):
+        """
+        Beenden einer Chat-Bestellung:
+         - setzt amLaufen für Bestellung der übergebenen ChatID zu False
+        :param id: ChatID der zu beendenden Bestellung
+        """
         self.bestellungen[id]["amLaufen"] = False
 
-    # Fügt die Bestellung eines Benutzers hinzu
     def neueBestellung(self, id, name, nummer):
-        
+        """
+        Hinzufügen einer User-Bestellung
+         - ggf. Anlegen des Users falls nicht schon in Bestellung dieses Chats
+         - Nummer wird an die Nummerliste des Users angefügt
+        :param id: ChatID des Users
+        :param name: Name des Users
+        :param nummer: einzugetragende Bestellnummer
+        """
+
         # Name existiert noch nicht
         if not name in self.bestellungen[id]['users']:
             print( "Neuer user", name )
-            self.bestellungen[id]['users'][name] = []  # Füge BestellListe für Name hinzu
+            self.bestellungen[id]['users'][name] = []  # Füge Bestellliste für Name hinzu
 
         print( self.bestellungen )
         self.bestellungen[id]['users'][name].append(nummer)
 
-    # Lösche die eine Bestellnummer eine einzelenen Nuters
     def loescheUserNummer(self, id, name, nummer):
+        """
+        Löscht eine bestimmte Bestellnummer eines Users:
+         - falls User nicht angelegt oder die Nummer nicht in seiner Liste: Funktionsabbruch
+         - Nummer wird aus der Liste des Users in dem angegebenen Chat entfernt
+        :param id: ChatID des Users
+        :param name: Name des Users
+        :param nummer: zu löschende Bestellnummer       
+        """
 
         # Name existiert nicht
         if not name in self.bestellungen[id]['users']:
@@ -97,8 +137,14 @@ class BestellungsManager:
         # Lösche nummer
         self.bestellungen[id]['users'][name].remove(nummer)
 
-    # Löscht die Bestellung eines einzelnen Nutzers
     def loescheUserGesamteBestellung(self, id, name):
+        """
+        Löscht die gesamte Bestellung eines Users:
+         - falls User nicht angelegt Funktionsabbruch
+         - entfernt User aus der Bestellung für die angegebene ChatID
+        :param id: ChatID des Users
+        :param name: Name des Users
+        """
 
         # Name existiert nicht
         if not name in self.bestellungen[id]['users']:
@@ -107,8 +153,16 @@ class BestellungsManager:
         # Lösche Bestellung
         self.bestellungen[id]['users'].pop(name)
 
-    # Gibt als Text zurück, wie of eine Bestell-Nummer bestellt wurde
     def finalOrderCalc(self, id):
+        """
+        Stellt eine Nachricht zusammen, wie oft insgesamt eine Bestellnummer bestellt wurde:
+         - legt dictionary counter an
+         - geht jede User-Bestellung durch und inkrementiert die Anzahl der Bestellungen für die jeweiligen Nummern in counter
+         - erstellt message string mit allen Bestellnummern und korrespondieren Anzahlen
+        :param id: ChatID der zusammenzufassenden Bestellung
+        :return: message string
+        """
+
         counter = {}
 
         for name in self.bestellungen[id]['users']:
@@ -124,8 +178,15 @@ class BestellungsManager:
             message += str(counter[nummer]) + " mal Gericht " + str(nummer) + "\n"
         return message
 
-    # Gibt als Text zurück wer was bestellt hat
     def werWas(self, id):
+        """
+    	Stellt eine Nachricht zusammen, welcher User was bestellt hat:
+         - legt message string an
+         - für alle User wird der Name und sämtliche bestellte Nummern in den string eingetragen
+        :param id: ChatID der zusammenzufassenden Bestellung
+        :return: message string
+        """
+
         message = ""
         for name, nummern in self.bestellungen[id]['users'].items():
             message += name + " hat  " + ",".join([str(nummer) for nummer in nummern]) + " bestellt\n"
