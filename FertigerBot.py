@@ -57,7 +57,7 @@ class BestellungsManager:
 
     def save(self):
         """
-        Speichere den Inhalt der Variable bestellung in JSON-Datei
+        Speichert den Inhalt der Variable bestellung in JSON-Datei
         """
 
         with open(_jsonFileName, "w") as file:
@@ -196,18 +196,37 @@ class BestellungsManager:
     
 
 
-
+"""
+Erstellung eines BestellungsManager-Objektes für den Programmablauf
+"""
 _manager = BestellungsManager()
 
 def sendMessage(update,text):
+    """
+    Sendet eine Nachricht in Telegram zurück
+    :param update: Update-Objekt mit Info um welchen Chat es sich handelt
+    :param text: zu sendende Nachricht
+    """
+
     update.message.reply_text(text)
 
-# Liefert die Chat Id zu einem Update
 def getChatId(update):
+    """
+    :param update: Update-Objekt mit Info um welchen Chat es sich handelt
+    :return: extrahierte ChatID des Update-Objekts 
+    """
+
     return str(update.message.chat.id)
 
-# Start a order 
 def startOrder(update,context):
+    """
+    Beginnt eine Bestellung:
+     - informiert den User ggf., dass schon eine Bestellung für diese ChatID vorhanden ist
+     - beginnt Bestellung und sendet das Menü
+    :param update: Update-Objekt mit Info um welchen Chat es sich handelt
+    :param context: Context-Objekt mit zusätzlichen Chat-Infos
+    """
+
     id = getChatId(update)
 
     # Es läuft schon eine Bestellung
@@ -222,11 +241,24 @@ def startOrder(update,context):
 
 
 def sendMenue(update,context):
+    """
+    Lädt das Menü und sendet es an den entsprechenden Chat
+     - Ausführen loadMenue
+    :param update: Update-Objekt mit Info um welchen Chat es sich handelt
+    :param context: Context-Objekt mit zusätzlichen Chat-Infos    
+    """
+
     loadMenue(update,context)                   # Load pdf from live website
     print("das Menü senden")
     context.bot.send_document(chat_id=update.effective_chat.id, document=open(_menuPlace, 'rb'))
 
 def loadMenue(update,context):
+    """
+    Lädt das Menü von der Lieferdienst-Website herunter, so lange URL noch gültig ist
+    :param update: Update-Objekt mit Info um welchen Chat es sich handelt
+    :param context: Context-Objekt mit zusätzlichen Chat-Infos
+    """
+
     print("Lade Speisekarte von Capriwebseite")
     url = getUrl()
     if (url == None ):
@@ -236,6 +268,13 @@ def loadMenue(update,context):
         urllib.request.urlretrieve(url, _menueName)
 
 def getUrl():
+    """
+    Sucht auf der Lieferdienst-Website nach der Speisekarten-URL:
+     - durchsucht Website nach Link zur Speisekarte
+     - erstellt URL aus Website-URL und Referenz zu Speisekarte
+    :return: zusammengesetzte URL
+    """
+
     r = requests.get(_capriUrl+'lieferservice.html')
     soup = BeautifulSoup(r.text, 'html.parser') 
 
@@ -245,8 +284,15 @@ def getUrl():
         return pdf
     return None
 
-# User writes a number in Chat
 def bestellung(update,context):
+    """
+    User bestellt etwas im Chat durch die Angabe einer Nummer:
+     - falls Bestellung läuft, wird Nummer eingetragen
+     - Ausführen get_bestellung
+    :param update: Update-Objekt mit Info um welchen Chat es sich handelt
+    :param context: Context-Objekt mit zusätzlichen Chat-Infos
+    """
+
     id = getChatId(update)
     print("Neue Nummer", id)
 
@@ -254,9 +300,17 @@ def bestellung(update,context):
         print("Füge Nummer Bestellung hinzu")
         get_bestellung(update, context)
     else:
-        print("Jemand hat Nr geschrieben obwohl eine Bestellung läuft.")
+        print("Jemand hat Nr geschrieben obwohl keine Bestellung läuft.")
 
 def get_bestellung(update,context):
+    """
+    Nachrichtenverarbeitung zur Bestellungsaufnahme:
+     - splitten der User-Nachricht zur Weiterverarbeitung
+     - Bestellungsaufnahme mit Ausführen neueBestellung
+    :param update: Update-Objekt mit Info um welchen Chat es sich handelt
+    :param context: Context-Objekt mit zusätzlichen Chat-Infos
+    """
+
     id = getChatId(update)
     print("get_bestellung")
 
@@ -265,17 +319,34 @@ def get_bestellung(update,context):
     orderNumber = texts[1]
     neueBestellung(id, name, orderNumber)
 
-#Generierung der Json-Datei mit NAmen und Bestellnummer
 def neueBestellung(id, name, orderNumber):
+    """
+    Bestellungsaufnahme:
+     - speichert Userbestellung in JSON-Datei des Managerobjektes
+    :param id: ChatID der Bestellung
+    :param name: Username
+    :param orderNumber: bestellte Nummer
+    """
+
     print(name + 'hat nr ' + orderNumber + 'bestellt')
     _manager.neueBestellung(id, name, orderNumber)
     _manager.save()
 
 
 def wasLoeschen(update,context):
+    """
+    Regelt den Ablauf einer Lösch-Anweisung:
+     - wenn keine Bestellung läuft Funktionsabbruch
+     - Nachricht zur Weiterverarbeitung splitten
+     - je nach Anweisung Aufruf einer Lösch-Funktions des Managerobjekts
+     - Speichern der geänderten Daten
+    :param update: Update-Objekt mit Info um welchen Chat es sich handelt
+    :param context: Context-Objekt mit zusätzlichen Chat-Infos
+    """
+
     id = getChatId(update)
 
-    # Wenn keine Bestellung am laufen ist
+    # Wenn keine Bestellung am Laufen ist
     if not _manager.istBestellungAmLaufen(id):
         return
 
@@ -293,6 +364,14 @@ def wasLoeschen(update,context):
 #____________________________________________________________________________________________________________________
 
 def end(update,context):
+    """
+    Beendet die Bestellung:
+     - beendet die Bestellung
+     - sendet die finale zusammengestellte Bestellung
+    :param update: Update-Objekt mit Info um welchen Chat es sich handelt
+    :param context: Context-Objekt mit zusätzlichen Chat-Infos
+    """
+
     print("ENDE")
     id = getChatId(update)
 
@@ -304,6 +383,12 @@ def end(update,context):
     sendMessage(update,message)
 
 def endWerWas(update,context):
+    """
+    Sendet die Information, welcher User welche Bestellung abgegeben hat. 
+    :param update: Update-Objekt mit Info um welchen Chat es sich handelt
+    :param context: Context-Objekt mit zusätzlichen Chat-Infos    
+    """
+
     id = getChatId(update)
     message = _manager.werWas(id)
     sendMessage(update, message)
@@ -312,6 +397,10 @@ def endWerWas(update,context):
 
 
 if __name__ == "__main__":
+    """
+    Führt je nach Chatupdates die jeweiligen Funktionen aus.
+    """
+
     updater = Updater(TOKEN, use_context=True)
 
     updater.dispatcher.add_handler(CommandHandler('capricapri', startOrder))

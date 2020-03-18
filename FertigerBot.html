@@ -105,7 +105,7 @@ Die&nbsp;Bestellungen&nbsp;werden&nbsp;in&nbsp;der&nbsp;Variable&nbsp;bestellung
 :param&nbsp;name:&nbsp;Name&nbsp;des&nbsp;Users<br>
 :param&nbsp;nummer:&nbsp;einzugetragende&nbsp;Bestellnummer</tt></dd></dl>
 
-<dl><dt><a name="BestellungsManager-save"><strong>save</strong></a>(self)</dt><dd><tt>Speichere&nbsp;den&nbsp;Inhalt&nbsp;der&nbsp;Variable&nbsp;bestellung&nbsp;in&nbsp;JSON-Datei</tt></dd></dl>
+<dl><dt><a name="BestellungsManager-save"><strong>save</strong></a>(self)</dt><dd><tt>Speichert&nbsp;den&nbsp;Inhalt&nbsp;der&nbsp;Variable&nbsp;bestellung&nbsp;in&nbsp;JSON-Datei</tt></dd></dl>
 
 <dl><dt><a name="BestellungsManager-werWas"><strong>werWas</strong></a>(self, id)</dt><dd><tt>Stellt&nbsp;eine&nbsp;Nachricht&nbsp;zusammen,&nbsp;welcher&nbsp;User&nbsp;was&nbsp;bestellt&nbsp;hat:<br>
 &nbsp;-&nbsp;legt&nbsp;message&nbsp;string&nbsp;an<br>
@@ -128,18 +128,57 @@ Data descriptors defined here:<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-bestellung"><strong>bestellung</strong></a>(update, context)</dt><dd><tt>#&nbsp;User&nbsp;writes&nbsp;a&nbsp;number&nbsp;in&nbsp;Chat</tt></dd></dl>
- <dl><dt><a name="-end"><strong>end</strong></a>(update, context)</dt></dl>
- <dl><dt><a name="-endWerWas"><strong>endWerWas</strong></a>(update, context)</dt></dl>
- <dl><dt><a name="-getChatId"><strong>getChatId</strong></a>(update)</dt><dd><tt>#&nbsp;Liefert&nbsp;die&nbsp;Chat&nbsp;Id&nbsp;zu&nbsp;einem&nbsp;Update</tt></dd></dl>
- <dl><dt><a name="-getUrl"><strong>getUrl</strong></a>()</dt></dl>
- <dl><dt><a name="-get_bestellung"><strong>get_bestellung</strong></a>(update, context)</dt></dl>
- <dl><dt><a name="-loadMenue"><strong>loadMenue</strong></a>(update, context)</dt></dl>
- <dl><dt><a name="-neueBestellung"><strong>neueBestellung</strong></a>(id, name, orderNumber)</dt><dd><tt>#Generierung&nbsp;der&nbsp;Json-Datei&nbsp;mit&nbsp;NAmen&nbsp;und&nbsp;Bestellnummer</tt></dd></dl>
- <dl><dt><a name="-sendMenue"><strong>sendMenue</strong></a>(update, context)</dt></dl>
- <dl><dt><a name="-sendMessage"><strong>sendMessage</strong></a>(update, text)</dt></dl>
- <dl><dt><a name="-startOrder"><strong>startOrder</strong></a>(update, context)</dt><dd><tt>#&nbsp;Start&nbsp;a&nbsp;order</tt></dd></dl>
- <dl><dt><a name="-wasLoeschen"><strong>wasLoeschen</strong></a>(update, context)</dt></dl>
+<td width="100%"><dl><dt><a name="-bestellung"><strong>bestellung</strong></a>(update, context)</dt><dd><tt>User&nbsp;bestellt&nbsp;etwas&nbsp;im&nbsp;Chat&nbsp;durch&nbsp;die&nbsp;Angabe&nbsp;einer&nbsp;Nummer:<br>
+&nbsp;-&nbsp;falls&nbsp;Bestellung&nbsp;läuft,&nbsp;wird&nbsp;Nummer&nbsp;eingetragen<br>
+&nbsp;-&nbsp;Ausführen&nbsp;get_bestellung<br>
+:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
+:param&nbsp;context:&nbsp;Context-Objekt&nbsp;mit&nbsp;zusätzlichen&nbsp;Chat-Infos</tt></dd></dl>
+ <dl><dt><a name="-end"><strong>end</strong></a>(update, context)</dt><dd><tt>Beendet&nbsp;die&nbsp;Bestellung:<br>
+&nbsp;-&nbsp;beendet&nbsp;die&nbsp;Bestellung<br>
+&nbsp;-&nbsp;sendet&nbsp;die&nbsp;finale&nbsp;zusammengestellte&nbsp;Bestellung<br>
+:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
+:param&nbsp;context:&nbsp;Context-Objekt&nbsp;mit&nbsp;zusätzlichen&nbsp;Chat-Infos</tt></dd></dl>
+ <dl><dt><a name="-endWerWas"><strong>endWerWas</strong></a>(update, context)</dt><dd><tt>Sendet&nbsp;die&nbsp;Information,&nbsp;welcher&nbsp;User&nbsp;welche&nbsp;Bestellung&nbsp;abgegeben&nbsp;hat.&nbsp;<br>
+:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
+:param&nbsp;context:&nbsp;Context-Objekt&nbsp;mit&nbsp;zusätzlichen&nbsp;Chat-Infos</tt></dd></dl>
+ <dl><dt><a name="-getChatId"><strong>getChatId</strong></a>(update)</dt><dd><tt>:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
+:return:&nbsp;extrahierte&nbsp;ChatID&nbsp;des&nbsp;Update-Objekts</tt></dd></dl>
+ <dl><dt><a name="-getUrl"><strong>getUrl</strong></a>()</dt><dd><tt>Sucht&nbsp;auf&nbsp;der&nbsp;Lieferdienst-Website&nbsp;nach&nbsp;der&nbsp;Speisekarten-URL:<br>
+&nbsp;-&nbsp;durchsucht&nbsp;Website&nbsp;nach&nbsp;Link&nbsp;zur&nbsp;Speisekarte<br>
+&nbsp;-&nbsp;erstellt&nbsp;URL&nbsp;aus&nbsp;Website-URL&nbsp;und&nbsp;Referenz&nbsp;zu&nbsp;Speisekarte<br>
+:return:&nbsp;zusammengesetzte&nbsp;URL</tt></dd></dl>
+ <dl><dt><a name="-get_bestellung"><strong>get_bestellung</strong></a>(update, context)</dt><dd><tt>Nachrichtenverarbeitung&nbsp;zur&nbsp;Bestellungsaufnahme:<br>
+&nbsp;-&nbsp;splitten&nbsp;der&nbsp;User-Nachricht&nbsp;zur&nbsp;Weiterverarbeitung<br>
+&nbsp;-&nbsp;Bestellungsaufnahme&nbsp;mit&nbsp;Ausführen&nbsp;neueBestellung<br>
+:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
+:param&nbsp;context:&nbsp;Context-Objekt&nbsp;mit&nbsp;zusätzlichen&nbsp;Chat-Infos</tt></dd></dl>
+ <dl><dt><a name="-loadMenue"><strong>loadMenue</strong></a>(update, context)</dt><dd><tt>Lädt&nbsp;das&nbsp;Menü&nbsp;von&nbsp;der&nbsp;Lieferdienst-Website&nbsp;herunter,&nbsp;so&nbsp;lange&nbsp;URL&nbsp;noch&nbsp;gültig&nbsp;ist<br>
+:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
+:param&nbsp;context:&nbsp;Context-Objekt&nbsp;mit&nbsp;zusätzlichen&nbsp;Chat-Infos</tt></dd></dl>
+ <dl><dt><a name="-neueBestellung"><strong>neueBestellung</strong></a>(id, name, orderNumber)</dt><dd><tt>Bestellungsaufnahme:<br>
+&nbsp;-&nbsp;speichert&nbsp;Userbestellung&nbsp;in&nbsp;JSON-Datei&nbsp;des&nbsp;Managerobjektes<br>
+:param&nbsp;id:&nbsp;ChatID&nbsp;der&nbsp;Bestellung<br>
+:param&nbsp;name:&nbsp;Username<br>
+:param&nbsp;orderNumber:&nbsp;bestellte&nbsp;Nummer</tt></dd></dl>
+ <dl><dt><a name="-sendMenue"><strong>sendMenue</strong></a>(update, context)</dt><dd><tt>Lädt&nbsp;das&nbsp;Menü&nbsp;und&nbsp;sendet&nbsp;es&nbsp;an&nbsp;den&nbsp;entsprechenden&nbsp;Chat<br>
+&nbsp;-&nbsp;Ausführen&nbsp;loadMenue<br>
+:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
+:param&nbsp;context:&nbsp;Context-Objekt&nbsp;mit&nbsp;zusätzlichen&nbsp;Chat-Infos</tt></dd></dl>
+ <dl><dt><a name="-sendMessage"><strong>sendMessage</strong></a>(update, text)</dt><dd><tt>Sendet&nbsp;eine&nbsp;Nachricht&nbsp;in&nbsp;Telegram&nbsp;zurück<br>
+:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
+:param&nbsp;text:&nbsp;zu&nbsp;sendende&nbsp;Nachricht</tt></dd></dl>
+ <dl><dt><a name="-startOrder"><strong>startOrder</strong></a>(update, context)</dt><dd><tt>Beginnt&nbsp;eine&nbsp;Bestellung:<br>
+&nbsp;-&nbsp;informiert&nbsp;den&nbsp;User&nbsp;ggf.,&nbsp;dass&nbsp;schon&nbsp;eine&nbsp;Bestellung&nbsp;für&nbsp;diese&nbsp;ChatID&nbsp;vorhanden&nbsp;ist<br>
+&nbsp;-&nbsp;beginnt&nbsp;Bestellung&nbsp;und&nbsp;sendet&nbsp;das&nbsp;Menü<br>
+:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
+:param&nbsp;context:&nbsp;Context-Objekt&nbsp;mit&nbsp;zusätzlichen&nbsp;Chat-Infos</tt></dd></dl>
+ <dl><dt><a name="-wasLoeschen"><strong>wasLoeschen</strong></a>(update, context)</dt><dd><tt>Regelt&nbsp;den&nbsp;Ablauf&nbsp;einer&nbsp;Lösch-Anweisung:<br>
+&nbsp;-&nbsp;wenn&nbsp;keine&nbsp;Bestellung&nbsp;läuft&nbsp;Funktionsabbruch<br>
+&nbsp;-&nbsp;Nachricht&nbsp;zur&nbsp;Weiterverarbeitung&nbsp;splitten<br>
+&nbsp;-&nbsp;je&nbsp;nach&nbsp;Anweisung&nbsp;Aufruf&nbsp;einer&nbsp;Lösch-Funktions&nbsp;des&nbsp;Managerobjekts<br>
+&nbsp;-&nbsp;Speichern&nbsp;der&nbsp;geänderten&nbsp;Daten<br>
+:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
+:param&nbsp;context:&nbsp;Context-Objekt&nbsp;mit&nbsp;zusätzlichen&nbsp;Chat-Infos</tt></dd></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
