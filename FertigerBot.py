@@ -2,9 +2,8 @@
 
 from telegram.ext import Updater, CommandHandler, MessageHandler
 from telegram.ext.filters import Filters
-from io import StringIO
-from bs4 import BeautifulSoup 
-import requests
+from urllib.request import urlopen
+import html.parser
 import re
 import urllib
 import json
@@ -163,6 +162,9 @@ class BestellungsManager:
         :return: message string
         """
 
+        # Stellt sicher, dass ein bestellungsobjekt existiert
+        self.istBestellungAmLaufen(id)
+
         counter = {}
 
         for name in self.bestellungen[id]['users']:
@@ -187,6 +189,9 @@ class BestellungsManager:
         :return: message string
         """
 
+        # Stellt sicher, dass ein bestellungsobjekt existiert
+        self.istBestellungAmLaufen(id)
+
         message = ""
         for name, nummern in self.bestellungen[id]['users'].items():
             message += name + " hat  " + ",".join([str(nummer) for nummer in nummern]) + " bestellt\n"
@@ -194,6 +199,20 @@ class BestellungsManager:
         return message
         
     
+class HTMLParser(html.parser.HTMLParser):
+
+    def __init__(self):
+        html.parser.HTMLParser.__init__(self)
+        self.links = []
+
+    def handle_starttag(self, tag, attrib):
+        if tag == 'a':
+            for name, value in attrib:
+                if name == 'href':
+                    self.links.append( value )
+
+    def getLinks(self):
+        return self.links
 
 
 """
@@ -260,14 +279,14 @@ def loadMenue(update,context):
     """
 
     print("Lade Speisekarte von Capriwebseite")
-    url = getUrl()
+    url = getUrlToPdf()
     if (url == None ):
         sendMessage(update, "Bitte kontaktieren Sie die Entwickler. Es hat sich etwas grundlegend geändert.")
     else:
         print(url +" in load Menue")
         urllib.request.urlretrieve(url, _menueName)
 
-def getUrl():
+def getUrlToPdf():
     """
     Sucht auf der Lieferdienst-Website nach der Speisekarten-URL:
      - durchsucht Website nach Link zur Speisekarte
@@ -275,13 +294,27 @@ def getUrl():
     :return: zusammengesetzte URL
     """
 
-    r = requests.get(_capriUrl+'lieferservice.html')
-    soup = BeautifulSoup(r.text, 'html.parser') 
+    # Website aufrufen und html code auslesen
+    r = urlopen(_capriUrl + 'lieferservice.html')
+    html = r.read().decode("utf-8")
 
-    for link in soup.findAll('a', attrs={'href': re.compile("img/")}):
-        pdf= _capriUrl + link.get('href')
-        print(pdf + "in for schleife")
-        return pdf
+    parser = HTMLParser()
+    parser.feed(html)
+
+    links = parser.getLinks()
+    print( parser.getLinks() )
+
+
+    # Check all found links
+    for link in links:
+
+        # Check for link to pdf file in img folder
+        if link.startswith("img/") and link.endswith(".pdf"):
+            linkToPdf = _capriUrl + link
+            print("Link to pdf:", linkToPdf)
+            return linkToPdf
+    
+    # No link to pdf found
     return None
 
 def bestellung(update,context):
@@ -374,6 +407,10 @@ def end(update,context):
 
     print("ENDE")
     id = getChatId(update)
+
+    if not _manager.istBestellungAmLaufen(id):
+        sendMessage(update, "Es muss erst eine Gruppenbestellung gestartet werden")
+        return
 
     _manager.beendeBestellung(id)
     _manager.save()
