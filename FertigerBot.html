@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>FertigerBot</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/toboxos/python-lieferdienst/FertigerBot.py">/home/toboxos/python-lieferdienst/FertigerBot.py</a></font></td></tr></table>
     <p><tt>#&nbsp;-*-&nbsp;coding:&nbsp;utf-8&nbsp;-*-</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -17,10 +17,10 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
-<a href="os.html">os</a><br>
-</td><td width="25%" valign=top><a href="re.html">re</a><br>
-<a href="requests.html">requests</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="html.html">html</a><br>
+<a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="re.html">re</a><br>
 </td><td width="25%" valign=top><a href="urllib.html">urllib</a><br>
 </td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -34,6 +34,12 @@
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="FertigerBot.html#BestellungsManager">BestellungsManager</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="html.parser.html#HTMLParser">html.parser.HTMLParser</a>(<a href="_markupbase.html#ParserBase">_markupbase.ParserBase</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="FertigerBot.html#HTMLParser">HTMLParser</a>
 </font></dt></dl>
 </dd>
 </dl>
@@ -121,6 +127,121 @@ Data descriptors defined here:<br>
 <dl><dt><strong>__weakref__</strong></dt>
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="HTMLParser">class <strong>HTMLParser</strong></a>(<a href="html.parser.html#HTMLParser">html.parser.HTMLParser</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Parst&nbsp;ein&nbsp;HTML&nbsp;Dokument&nbsp;und&nbsp;extrahiert&nbsp;alle&nbsp;Hyperlinks<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="FertigerBot.html#HTMLParser">HTMLParser</a></dd>
+<dd><a href="html.parser.html#HTMLParser">html.parser.HTMLParser</a></dd>
+<dd><a href="_markupbase.html#ParserBase">_markupbase.ParserBase</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="HTMLParser-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Initialize&nbsp;and&nbsp;reset&nbsp;this&nbsp;instance.<br>
+&nbsp;<br>
+If&nbsp;convert_charrefs&nbsp;is&nbsp;True&nbsp;(the&nbsp;default),&nbsp;all&nbsp;character&nbsp;references<br>
+are&nbsp;automatically&nbsp;converted&nbsp;to&nbsp;the&nbsp;corresponding&nbsp;Unicode&nbsp;characters.</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-getLinks"><strong>getLinks</strong></a>(self)</dt><dd><tt>Gibt&nbsp;alle&nbsp;gefunden&nbsp;Hyperlinks&nbsp;zurück</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-handle_starttag"><strong>handle_starttag</strong></a>(self, tag, attrib)</dt><dd><tt>Wird&nbsp;für&nbsp;jedes&nbsp;XML-Element&nbsp;im&nbsp;HTML-Code&nbsp;augerufen<br>
+:param&nbsp;tag:&nbsp;Typ&nbsp;des&nbsp;Elements<br>
+:param&nbsp;attrib:&nbsp;Alle&nbsp;Attribute&nbsp;als&nbsp;Liste&nbsp;von&nbsp;Tuples</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="html.parser.html#HTMLParser">html.parser.HTMLParser</a>:<br>
+<dl><dt><a name="HTMLParser-check_for_whole_start_tag"><strong>check_for_whole_start_tag</strong></a>(self, i)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;check&nbsp;to&nbsp;see&nbsp;if&nbsp;we&nbsp;have&nbsp;a&nbsp;complete&nbsp;starttag;&nbsp;return&nbsp;end<br>
+#&nbsp;or&nbsp;-1&nbsp;if&nbsp;incomplete.</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-clear_cdata_mode"><strong>clear_cdata_mode</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HTMLParser-close"><strong>close</strong></a>(self)</dt><dd><tt>Handle&nbsp;any&nbsp;buffered&nbsp;data.</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-feed"><strong>feed</strong></a>(self, data)</dt><dd><tt>Feed&nbsp;data&nbsp;to&nbsp;the&nbsp;parser.<br>
+&nbsp;<br>
+Call&nbsp;this&nbsp;as&nbsp;often&nbsp;as&nbsp;you&nbsp;want,&nbsp;with&nbsp;as&nbsp;little&nbsp;or&nbsp;as&nbsp;much&nbsp;text<br>
+as&nbsp;you&nbsp;want&nbsp;(may&nbsp;include&nbsp;'\n').</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-get_starttag_text"><strong>get_starttag_text</strong></a>(self)</dt><dd><tt>Return&nbsp;full&nbsp;source&nbsp;of&nbsp;start&nbsp;tag:&nbsp;'&lt;...&gt;'.</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-goahead"><strong>goahead</strong></a>(self, end)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;handle&nbsp;data&nbsp;as&nbsp;far&nbsp;as&nbsp;reasonable.&nbsp;&nbsp;May&nbsp;leave&nbsp;state<br>
+#&nbsp;and&nbsp;data&nbsp;to&nbsp;be&nbsp;processed&nbsp;by&nbsp;a&nbsp;subsequent&nbsp;call.&nbsp;&nbsp;If&nbsp;'end'&nbsp;is<br>
+#&nbsp;true,&nbsp;force&nbsp;handling&nbsp;all&nbsp;data&nbsp;as&nbsp;if&nbsp;followed&nbsp;by&nbsp;EOF&nbsp;marker.</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-handle_charref"><strong>handle_charref</strong></a>(self, name)</dt><dd><tt>#&nbsp;Overridable&nbsp;--&nbsp;handle&nbsp;character&nbsp;reference</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-handle_comment"><strong>handle_comment</strong></a>(self, data)</dt><dd><tt>#&nbsp;Overridable&nbsp;--&nbsp;handle&nbsp;comment</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-handle_data"><strong>handle_data</strong></a>(self, data)</dt><dd><tt>#&nbsp;Overridable&nbsp;--&nbsp;handle&nbsp;data</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-handle_decl"><strong>handle_decl</strong></a>(self, decl)</dt><dd><tt>#&nbsp;Overridable&nbsp;--&nbsp;handle&nbsp;declaration</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-handle_endtag"><strong>handle_endtag</strong></a>(self, tag)</dt><dd><tt>#&nbsp;Overridable&nbsp;--&nbsp;handle&nbsp;end&nbsp;tag</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-handle_entityref"><strong>handle_entityref</strong></a>(self, name)</dt><dd><tt>#&nbsp;Overridable&nbsp;--&nbsp;handle&nbsp;entity&nbsp;reference</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-handle_pi"><strong>handle_pi</strong></a>(self, data)</dt><dd><tt>#&nbsp;Overridable&nbsp;--&nbsp;handle&nbsp;processing&nbsp;instruction</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-handle_startendtag"><strong>handle_startendtag</strong></a>(self, tag, attrs)</dt><dd><tt>#&nbsp;Overridable&nbsp;--&nbsp;finish&nbsp;processing&nbsp;of&nbsp;start+end&nbsp;tag:&nbsp;&lt;tag.../&gt;</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-parse_bogus_comment"><strong>parse_bogus_comment</strong></a>(self, i, report=1)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;parse&nbsp;bogus&nbsp;comment,&nbsp;return&nbsp;length&nbsp;or&nbsp;-1&nbsp;if&nbsp;not&nbsp;terminated<br>
+#&nbsp;see&nbsp;<a href="http://www.w3.org/TR/html5/tokenization.html#bogus-comment-state">http://www.w3.org/TR/html5/tokenization.html#bogus-comment-state</a></tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-parse_endtag"><strong>parse_endtag</strong></a>(self, i)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;parse&nbsp;endtag,&nbsp;return&nbsp;end&nbsp;or&nbsp;-1&nbsp;if&nbsp;incomplete</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-parse_html_declaration"><strong>parse_html_declaration</strong></a>(self, i)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;parse&nbsp;html&nbsp;declarations,&nbsp;return&nbsp;length&nbsp;or&nbsp;-1&nbsp;if&nbsp;not&nbsp;terminated<br>
+#&nbsp;See&nbsp;w3.org/TR/html5/tokenization.html#markup-declaration-open-state<br>
+#&nbsp;See&nbsp;also&nbsp;parse_declaration&nbsp;in&nbsp;_markupbase</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-parse_pi"><strong>parse_pi</strong></a>(self, i)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;parse&nbsp;processing&nbsp;instr,&nbsp;return&nbsp;end&nbsp;or&nbsp;-1&nbsp;if&nbsp;not&nbsp;terminated</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-parse_starttag"><strong>parse_starttag</strong></a>(self, i)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;handle&nbsp;starttag,&nbsp;return&nbsp;end&nbsp;or&nbsp;-1&nbsp;if&nbsp;not&nbsp;terminated</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-reset"><strong>reset</strong></a>(self)</dt><dd><tt>Reset&nbsp;this&nbsp;instance.&nbsp;&nbsp;Loses&nbsp;all&nbsp;unprocessed&nbsp;data.</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-set_cdata_mode"><strong>set_cdata_mode</strong></a>(self, elem)</dt></dl>
+
+<dl><dt><a name="HTMLParser-unescape"><strong>unescape</strong></a>(self, s)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;helper&nbsp;to&nbsp;remove&nbsp;special&nbsp;character&nbsp;quoting</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-unknown_decl"><strong>unknown_decl</strong></a>(self, data)</dt></dl>
+
+<hr>
+Data and other attributes inherited from <a href="html.parser.html#HTMLParser">html.parser.HTMLParser</a>:<br>
+<dl><dt><strong>CDATA_CONTENT_ELEMENTS</strong> = ('script', 'style')</dl>
+
+<hr>
+Methods inherited from <a href="_markupbase.html#ParserBase">_markupbase.ParserBase</a>:<br>
+<dl><dt><a name="HTMLParser-error"><strong>error</strong></a>(self, message)</dt></dl>
+
+<dl><dt><a name="HTMLParser-getpos"><strong>getpos</strong></a>(self)</dt><dd><tt>Return&nbsp;current&nbsp;line&nbsp;number&nbsp;and&nbsp;offset.</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-parse_comment"><strong>parse_comment</strong></a>(self, i, report=1)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;parse&nbsp;comment,&nbsp;return&nbsp;length&nbsp;or&nbsp;-1&nbsp;if&nbsp;not&nbsp;terminated</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-parse_declaration"><strong>parse_declaration</strong></a>(self, i)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;parse&nbsp;declaration&nbsp;(for&nbsp;use&nbsp;by&nbsp;subclasses).</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-parse_marked_section"><strong>parse_marked_section</strong></a>(self, i, report=1)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;parse&nbsp;a&nbsp;marked&nbsp;section<br>
+#&nbsp;Override&nbsp;this&nbsp;to&nbsp;handle&nbsp;MS-word&nbsp;extension&nbsp;syntax&nbsp;&lt;![if&nbsp;word]&gt;content&lt;![endif]&gt;</tt></dd></dl>
+
+<dl><dt><a name="HTMLParser-updatepos"><strong>updatepos</strong></a>(self, i, j)</dt><dd><tt>#&nbsp;Internal&nbsp;--&nbsp;update&nbsp;line&nbsp;number&nbsp;and&nbsp;offset.&nbsp;&nbsp;This&nbsp;should&nbsp;be<br>
+#&nbsp;called&nbsp;for&nbsp;each&nbsp;piece&nbsp;of&nbsp;data&nbsp;exactly&nbsp;once,&nbsp;in&nbsp;order&nbsp;--&nbsp;in&nbsp;other<br>
+#&nbsp;words&nbsp;the&nbsp;concatenation&nbsp;of&nbsp;all&nbsp;the&nbsp;input&nbsp;strings&nbsp;to&nbsp;this<br>
+#&nbsp;function&nbsp;should&nbsp;be&nbsp;exactly&nbsp;the&nbsp;entire&nbsp;input.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="_markupbase.html#ParserBase">_markupbase.ParserBase</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
@@ -143,7 +264,7 @@ Data descriptors defined here:<br>
 :param&nbsp;context:&nbsp;Context-Objekt&nbsp;mit&nbsp;zusätzlichen&nbsp;Chat-Infos</tt></dd></dl>
  <dl><dt><a name="-getChatId"><strong>getChatId</strong></a>(update)</dt><dd><tt>:param&nbsp;update:&nbsp;Update-Objekt&nbsp;mit&nbsp;Info&nbsp;um&nbsp;welchen&nbsp;Chat&nbsp;es&nbsp;sich&nbsp;handelt<br>
 :return:&nbsp;extrahierte&nbsp;ChatID&nbsp;des&nbsp;Update-Objekts</tt></dd></dl>
- <dl><dt><a name="-getUrl"><strong>getUrl</strong></a>()</dt><dd><tt>Sucht&nbsp;auf&nbsp;der&nbsp;Lieferdienst-Website&nbsp;nach&nbsp;der&nbsp;Speisekarten-URL:<br>
+ <dl><dt><a name="-getUrlToPdf"><strong>getUrlToPdf</strong></a>()</dt><dd><tt>Sucht&nbsp;auf&nbsp;der&nbsp;Lieferdienst-Website&nbsp;nach&nbsp;der&nbsp;Speisekarten-URL:<br>
 &nbsp;-&nbsp;durchsucht&nbsp;Website&nbsp;nach&nbsp;Link&nbsp;zur&nbsp;Speisekarte<br>
 &nbsp;-&nbsp;erstellt&nbsp;URL&nbsp;aus&nbsp;Website-URL&nbsp;und&nbsp;Referenz&nbsp;zu&nbsp;Speisekarte<br>
 :return:&nbsp;zusammengesetzte&nbsp;URL</tt></dd></dl>

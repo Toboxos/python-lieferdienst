@@ -200,18 +200,35 @@ class BestellungsManager:
         
     
 class HTMLParser(html.parser.HTMLParser):
+    """
+    Parst ein HTML Dokument und extrahiert alle Hyperlinks
+    """
+
 
     def __init__(self):
         html.parser.HTMLParser.__init__(self)
-        self.links = []
+        self.links = [] # Leere liste initialisieren
 
     def handle_starttag(self, tag, attrib):
+        """
+        Wird für jedes XML-Element im HTML-Code augerufen
+        :param tag: Typ des Elements
+        :param attrib: Alle Attribute als Liste von Tuples
+        """
+
+        # Nur a-Elemente untersuchen
         if tag == 'a':
+
+            # Nach Hyperlink-Verweis suchen
             for name, value in attrib:
                 if name == 'href':
-                    self.links.append( value )
+                    self.links.append( value ) # Gefunden Hyperlink hinzufügen
 
     def getLinks(self):
+        """
+        Gibt alle gefunden Hyperlinks zurück
+        """
+
         return self.links
 
 
@@ -279,7 +296,7 @@ def loadMenue(update,context):
     """
 
     print("Lade Speisekarte von Capriwebseite")
-    url = getUrlToPdf()
+    url = getUrlToPdf() # Hole url um pdf herunterzuladen
     if (url == None ):
         sendMessage(update, "Bitte kontaktieren Sie die Entwickler. Es hat sich etwas grundlegend geändert.")
     else:
